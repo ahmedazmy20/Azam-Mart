@@ -1,0 +1,8 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+.active {
+  color: rgb(8, 26, 227);
+}
