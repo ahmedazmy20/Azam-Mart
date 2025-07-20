@@ -15,8 +15,10 @@ import VerifyCode from "./pages/VerifyCode/VerifyCode";
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
 import UserContextProvider from "./Context/UserContext";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 function App() {
+  const queryClient = new QueryClient();
   let router = createBrowserRouter([
     {
       path: "/",
@@ -100,7 +102,9 @@ function App() {
   return (
     <>
       <UserContextProvider>
-        <RouterProvider router={router}></RouterProvider>
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router}></RouterProvider>
+        </QueryClientProvider>
       </UserContextProvider>
     </>
   );

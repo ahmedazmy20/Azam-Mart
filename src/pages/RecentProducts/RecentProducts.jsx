@@ -1,55 +1,29 @@
-import axios from "axios";
-import { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-import "swiper/css/navigation"; // لو هتستخدم الأزرار
+import "swiper/css/navigation";
 import "swiper/css/scrollbar";
 import { motion as _motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 import { useOutletContext } from "react-router-dom";
+import useProducts from "../../Hooks/useProducts";
 
 export default function RecentProducts() {
-  const [products, setProducts] = useState([]);
-  const [isloading, setisloading] = useState(false);
   const { setQuickViewProduct } = useOutletContext();
+  const [mainImages, setMainImages] = useState({});
 
-  async function getProducts() {
-    setisloading(true);
-    await axios
-      .get("https://ecommerce.routemisr.com/api/v1/products")
-      .then((res) => {
-        setisloading(false);
-        // أضف لكل منتج خاصية جديدة: currentImage
-        const updatedProducts = res.data.data.map((product) => ({
-          ...product,
-          currentImage: product.imageCover,
-        }));
-        setProducts(updatedProducts);
-      })
-      .catch((err) => {
-        setisloading(false);
-        console.log(err);
-      });
+  const { data, isLoading } = useProducts();
+  function handleImageClick(productId, newImage) {
+    setMainImages((prevImages) => ({
+      ...prevImages,
+      [productId]: newImage,
+    }));
   }
-
-  useEffect(() => {
-    getProducts();
-  }, []);
-
-  const handleImageClick = (productId, newImage) => {
-    setProducts((prev) =>
-      prev.map((product) =>
-        product._id === productId
-          ? { ...product, currentImage: newImage }
-          : product
-      )
-    );
-  };
 
   return (
     <>
-      {isloading ? (
-        <div className='fixed top-0 left-0 w-full h-full flex justify-center items-center'>
+      {isLoading ? (
+        <div className='fixed z-50 bg-white md:top-16 left-0 w-full h-full flex justify-center items-center'>
           <div className='animate-spin rounded-full h-24 w-24 border-b-4 border-gray-900'></div>
         </div>
       ) : (
@@ -60,7 +34,7 @@ export default function RecentProducts() {
           transition={{ duration: 0.8 }}
           className='grid grid-cols-1 place-items-center sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mt-10'
         >
-          {products.map((product) => (
+          {data?.data?.data.map((product) => (
             <div
               key={product.id}
               className='max-w-sm w-xs sm:w-full rounded-lg shadow-md overflow-hidden'
@@ -69,8 +43,9 @@ export default function RecentProducts() {
                 <div className='relative group'>
                   {/* الصورة الأساسية */}
                   <img
-                    className='p-4 rounded-t-lg w-full h-64 object-contain'
-                    src={product.currentImage}
+                    loading='lazy'
+                    className='main-image p-4 rounded-t-lg w-full h-64 object-contain'
+                    src={mainImages[product.id] || product.imageCover}
                     alt={product.title}
                   />
 
@@ -104,6 +79,7 @@ export default function RecentProducts() {
                   {product.images.map((img, i) => (
                     <SwiperSlide key={i} className='w-auto group'>
                       <img
+                        loading='lazy'
                         className='w-16 h-16 object-cover cursor-pointer rounded-md border border-transparent group-hover:border-blue-500 transition-all duration-300'
                         src={img}
                         alt={`${product.title}-thumb-${i}`}
