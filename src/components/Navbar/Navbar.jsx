@@ -3,7 +3,7 @@ import { motion as _motion, AnimatePresence } from "framer-motion";
 import logo from "../../assets/logo2.png";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useContext } from "react";
-import { UserContext } from "../../Context/UserContext";
+import { UserContext } from "../../Context/User/UserContext";
 
 export default function Navbar() {
   let { userLogin, setuserLogin } = useContext(UserContext);

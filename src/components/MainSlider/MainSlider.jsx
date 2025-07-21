@@ -1,4 +1,3 @@
-import React from "react";
 import img1 from "../../assets/images/img1.jpg";
 import img2 from "../../assets/images/img2.jpg";
 import img3 from "../../assets/images/img3.jpg";
@@ -13,6 +12,7 @@ import img11 from "../../assets/images/img11.jpg";
 import img12 from "../../assets/images/img12.jpg";
 import img13 from "../../assets/images/img13.jpg";
 import img14 from "../../assets/images/img14.jpg";
+import { motion as _motion } from "framer-motion";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { EffectCube, Autoplay } from "swiper/modules";
@@ -36,7 +36,13 @@ const images = [
 
 export default function MainSlider() {
   return (
-    <div className='grid rounded-3xl grid-cols-1 md:grid-cols-12 mt-6 gap-4'>
+    <_motion.div
+      style={{ willChange: "transform, opacity" }}
+      initial={{ y: -200, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.7, ease: "easeOut" }}
+      className='grid rounded-3xl grid-cols-1 md:grid-cols-12 mt-6 gap-4'
+    >
       {/* Main Slider */}
       <div className='main-slider md:col-span-7 w-full max-w-3xl mx-auto'>
         <Swiper
@@ -56,6 +62,7 @@ export default function MainSlider() {
           {images.map((img, i) => (
             <SwiperSlide key={i}>
               <img
+                loading='lazy'
                 src={img}
                 alt={`slide-${i}`}
                 className='w-full h-[300px] md:h-[480px] object-cover rounded-xl'
@@ -69,6 +76,7 @@ export default function MainSlider() {
       <div className='tow-images hidden md:flex md:col-span-5 flex-col gap-3'>
         <div className='w-[90%] mx-auto'>
           <img
+            loading='lazy'
             src={img11}
             alt='book1'
             className='w-full md:h-[130px] lg:h-[180px] xl:h-[230px] object-cover rounded-2xl'
@@ -76,12 +84,13 @@ export default function MainSlider() {
         </div>
         <div className='w-[90%] mx-auto'>
           <img
+            loading='lazy'
             src={img9}
             alt='book2'
             className='w-full md:h-[130px] shadow-2xl lg:h-[180px] xl:h-[230px] object-cover rounded-2xl'
           />
         </div>
       </div>
-    </div>
+    </_motion.div>
   );
 }

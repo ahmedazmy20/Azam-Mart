@@ -4,13 +4,39 @@ import "swiper/css/navigation";
 import "swiper/css/scrollbar";
 import { motion as _motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import useProducts from "../../Hooks/useProducts";
+import { CartContext } from "../../Context/Cart/CartContext";
+import { Bounce, toast } from "react-toastify";
 
 export default function RecentProducts() {
   const { setQuickViewProduct } = useOutletContext();
   const [mainImages, setMainImages] = useState({});
+  const [loadingCartId, setLoadingCartId] = useState(null);
+  const { addProductToCart } = useContext(CartContext);
+
+  async function addToCart(id) {
+    setLoadingCartId(id); // Start spinner for this product
+
+    try {
+      const { data } = await addProductToCart(id);
+      if (data.status === "success") {
+        toast.success(data.message, {
+          position: "top-right",
+          autoClose: 2000,
+          theme: "light",
+          transition: Bounce,
+        });
+      } else {
+        toast.error(data.message || "Something went wrong");
+      }
+    } catch (error) {
+      toast.error(error.message || "Error while adding to cart");
+    } finally {
+      setLoadingCartId(null); // Stop spinner
+    }
+  }
 
   const { data, isLoading } = useProducts();
   function handleImageClick(productId, newImage) {
@@ -59,7 +85,34 @@ export default function RecentProducts() {
                         Quick View
                       </button>
                       <div className='flex flex-col gap-5 bg-slate-300 px-2 py-4 rounded-lg text-blue-700'>
-                        <i className='fa-solid fa-cart-plus fa-bounce text-xl cursor-pointer'></i>
+                        {loadingCartId === product.id ? (
+                          <svg
+                            className='animate-spin h-5 w-5 text-blue-600'
+                            xmlns='http://www.w3.org/2000/svg'
+                            fill='none'
+                            viewBox='0 0 24 24'
+                          >
+                            <circle
+                              className='opacity-25'
+                              cx='12'
+                              cy='12'
+                              r='10'
+                              stroke='currentColor'
+                              strokeWidth='4'
+                            ></circle>
+                            <path
+                              className='opacity-75'
+                              fill='currentColor'
+                              d='M4 12a8 8 0 018-8v8z'
+                            ></path>
+                          </svg>
+                        ) : (
+                          <i
+                            onClick={() => addToCart(product.id)}
+                            className='fa-solid fa-cart-plus fa-bounce text-xl cursor-pointer'
+                          ></i>
+                        )}
+
                         <i className='fa-solid fa-heart fa-beat text-xl cursor-pointer'></i>
                         <i className='fa-brands fa-shake fa-quinscape text-xl'></i>
                       </div>

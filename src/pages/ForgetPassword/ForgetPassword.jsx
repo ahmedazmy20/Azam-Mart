@@ -3,7 +3,7 @@ import { useFormik } from "formik";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
-import { motion } from "framer-motion";
+import { motion as _motion } from "framer-motion";
 
 export default function ForgotPassword() {
   const [message, setMessage] = useState("");
@@ -27,7 +27,6 @@ export default function ForgotPassword() {
         values
       );
       console.log("forget passowr data", data);
-      // window.alert(data.message);
       setMessage(data.message || "Code sent to your email.");
       console.log("message from forget password", data.message); // success or error
 
@@ -66,7 +65,7 @@ export default function ForgotPassword() {
   //   };
 
   return (
-    <motion.div
+    <_motion.div
       initial={{ opacity: 0, scale: 0.1 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.5 }}
@@ -107,26 +106,26 @@ export default function ForgotPassword() {
           {isloading ? <i className='fa fa-spinner fa-spin'></i> : "Send Code"}
         </button>
         {message && (
-          <motion.p
+          <_motion.p
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
             className='text-green-600 mt-3 text-sm'
           >
             {message}
-          </motion.p>
+          </_motion.p>
         )}
         {apierror && (
-          <motion.p
+          <_motion.p
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
             className='text-red-600 mt-3  text-sm'
           >
             {apierror}
-          </motion.p>
+          </_motion.p>
         )}
       </form>
-    </motion.div>
+    </_motion.div>
   );
 }

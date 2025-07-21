@@ -9,6 +9,9 @@ import { FreeMode } from "swiper/modules";
 import { motion as _motion } from "framer-motion";
 import { Navigation } from "swiper/modules";
 import { useOutletContext } from "react-router-dom";
+import { useContext } from "react";
+import { CartContext } from "../../Context/Cart/CartContext";
+import { Bounce, toast } from "react-toastify";
 
 export default function ProductDetailsPage() {
   const { id, category } = useParams();
@@ -16,6 +19,8 @@ export default function ProductDetailsPage() {
   const [relatedproducts, setRelatedproducts] = useState([]);
   const [mainImage, setMainImage] = useState("");
   const { setQuickViewProduct } = useOutletContext();
+  const { addProductToCart } = useContext(CartContext);
+  const [loadingCartId, setLoadingCartId] = useState(null);
 
   function getsinglesroduct(id) {
     axios
@@ -40,6 +45,32 @@ export default function ProductDetailsPage() {
       .catch((err) => console.log(err));
   }
 
+  async function addToCart(id) {
+    setLoadingCartId(id);
+    try {
+      const { data } = await addProductToCart(id);
+      if (data.status === "success") {
+        toast.success(data.message, {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        });
+        // setAddedToCart((prev) => [...prev, id]);
+      } else {
+        toast(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setLoadingCartId(null); // Stop loading
+    }
+  }
   useEffect(() => {
     getsinglesroduct(id);
     getrelatedProducts();
@@ -190,9 +221,40 @@ export default function ProductDetailsPage() {
 
             <div className='actions flex gap-8 items-center  mt-5 text-gray-500'>
               {/* Add to Cart */}
-              <button className='fa-bounce bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded cursor-pointer'>
-                Add to Cart
+              <button
+                onClick={() => addToCart(singleproduct.id)}
+                className='bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded flex items-center justify-center gap-2 min-w-[120px]'
+                disabled={loadingCartId === singleproduct.id}
+              >
+                {loadingCartId === singleproduct.id ? (
+                  <>
+                    <svg
+                      className='animate-spin h-5 w-5 text-white'
+                      xmlns='http://www.w3.org/2000/svg'
+                      fill='none'
+                      viewBox='0 0 24 24'
+                    >
+                      <circle
+                        className='opacity-25'
+                        cx='12'
+                        cy='12'
+                        r='10'
+                        stroke='currentColor'
+                        strokeWidth='4'
+                      ></circle>
+                      <path
+                        className='opacity-75'
+                        fill='currentColor'
+                        d='M4 12a8 8 0 018-8v8z'
+                      ></path>
+                    </svg>
+                    <span>Adding...</span>
+                  </>
+                ) : (
+                  "Add to Cart"
+                )}
               </button>
+
               {/* Add to Wishlist */}
               <i className='fas fa-heart fa-beat text-3xl text-blue-500 hover:text-blue-600 cursor-pointer'></i>
             </div>

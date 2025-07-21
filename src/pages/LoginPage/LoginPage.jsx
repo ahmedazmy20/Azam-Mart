@@ -5,7 +5,7 @@ import { useContext } from "react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
-import { UserContext } from "../../Context/UserContext";
+import { UserContext } from "../../Context/User/UserContext";
 
 export default function LoginPage() {
   let { setuserLogin } = useContext(UserContext);
@@ -39,7 +39,6 @@ export default function LoginPage() {
       setuserLogin(data.token);
       navigate("/");
     } catch (error) {
-      console.log(error.response.data.message);
       setApierror(error.response.data.message);
     } finally {
       setIsloading(false);

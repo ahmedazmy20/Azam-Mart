@@ -1,5 +1,6 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { EffectCoverflow, Autoplay } from "swiper/modules";
+import { motion as _motion } from "framer-motion";
 import "swiper/css";
 import "swiper/css/effect-coverflow";
 import axios from "axios";
@@ -13,11 +14,15 @@ export default function CategoriesSlider() {
     queryKey: ["categories"],
     queryFn: getCategories,
   });
-  // console.log(data?.data.data);
 
   return (
     <>
-      <div className='mt-10'>
+      <_motion.div
+        initial={{ scale: 1.1, opacity: 0, filter: "blur(10px)" }}
+        animate={{ scale: 1, opacity: 1, filter: "blur(0px)" }}
+        transition={{ duration: 0.7, ease: "easeOut" }}
+        className='mt-10'
+      >
         {data?.data.data.length > 0 && (
           <Swiper
             modules={[EffectCoverflow, Autoplay]}
@@ -60,7 +65,7 @@ export default function CategoriesSlider() {
             ))}
           </Swiper>
         )}
-      </div>
+      </_motion.div>
     </>
   );
 }

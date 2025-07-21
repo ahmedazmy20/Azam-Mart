@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { motion as _motion } from "framer-motion";
 import { useContext } from "react";
-import { UserContext } from "../../Context/UserContext";
+import { UserContext } from "../../Context/User/UserContext";
 export default function RegisterPage() {
   let { setuserLogin } = useContext(UserContext);
   const navigate = useNavigate();
@@ -49,7 +49,6 @@ export default function RegisterPage() {
       setuserLogin(data.token);
       navigate("/");
     } catch (error) {
-      console.log(error.response.data.message);
       setApierror(error.response.data.message);
     } finally {
       setIsloading(false);

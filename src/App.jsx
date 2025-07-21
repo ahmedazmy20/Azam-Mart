@@ -13,9 +13,11 @@ import NotfoundPage from "./pages/NotfoundPage/NotfoundPage";
 import ForgotPassword from "./pages/ForgetPassword/ForgetPassword";
 import VerifyCode from "./pages/VerifyCode/VerifyCode";
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
-import UserContextProvider from "./Context/UserContext";
+import UserContextProvider from "./Context/User/UserContextProvider";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import CartContextProvider from "./Context/Cart/CartContextProvider";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   const queryClient = new QueryClient();
@@ -103,7 +105,10 @@ function App() {
     <>
       <UserContextProvider>
         <QueryClientProvider client={queryClient}>
-          <RouterProvider router={router}></RouterProvider>
+          <CartContextProvider>
+            <RouterProvider router={router}></RouterProvider>
+            <ToastContainer />
+          </CartContextProvider>
         </QueryClientProvider>
       </UserContextProvider>
     </>
