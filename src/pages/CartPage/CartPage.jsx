@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { motion as _motion } from "framer-motion";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import emptyCartImage from "../../assets/emptycart.png";
 
 export default function CartPage() {
   const {
@@ -97,9 +98,9 @@ export default function CartPage() {
               className='p-6 rounded-2xl  flex flex-col items-center max-w-sm'
             >
               <img
-                src='../../src/assets/emptycart.png' /* أو استخدم svg/png المناسب */
+                src={emptyCartImage} /* أو استخدم svg/png المناسب */
                 alt='Empty Cart'
-                className='w- h- mb-4 fa-bounce'
+                className='mb-4 fa-bounce'
               />
 
               <h2 className='text-4xl font-bold text-gray-800 mb-2'>
