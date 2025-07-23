@@ -12,6 +12,7 @@ import { useOutletContext } from "react-router-dom";
 import { useContext } from "react";
 import { CartContext } from "../../Context/Cart/CartContext";
 import { Bounce, toast } from "react-toastify";
+import { WishlistContext } from "../../Context/Wishlist/WishlistContext";
 
 export default function ProductDetailsPage() {
   const { id, category } = useParams();
@@ -20,7 +21,10 @@ export default function ProductDetailsPage() {
   const [mainImage, setMainImage] = useState("");
   const { setQuickViewProduct } = useOutletContext();
   const { addProductToCart } = useContext(CartContext);
+  const { addProductToWishlist } = useContext(WishlistContext);
+
   const [loadingCartId, setLoadingCartId] = useState(null);
+  const [loadingWishlistId, setLoadingWishlistId] = useState(null);
 
   function getsinglesroduct(id) {
     axios
@@ -86,9 +90,31 @@ export default function ProductDetailsPage() {
     );
   }
 
+  // add to wishlist
+  async function addToWishlist(id) {
+    setLoadingWishlistId(id);
+    try {
+      const { data } = await addProductToWishlist(id);
+      if (data.status === "success") {
+        toast.success(data.message, {
+          position: "top-right",
+          autoClose: 2000,
+          theme: "light",
+          transition: Bounce,
+        });
+      } else {
+        toast.error(data.message || "Something went wrong");
+      }
+    } catch (error) {
+      toast.error(error.message || "Error while adding to cart");
+    } finally {
+      setLoadingWishlistId(null);
+    }
+  }
+
   if (!singleproduct) {
     return (
-      <div className='fixed top-0 left-0 w-full h-full flex justify-center items-center'>
+      <div className='fixed top-0 left-0 w-full h-full flex justify-center items-center bg-white'>
         <div className='animate-spin rounded-full h-24 w-24 border-b-4 border-gray-900'></div>
       </div>
     );
@@ -256,7 +282,33 @@ export default function ProductDetailsPage() {
               </button>
 
               {/* Add to Wishlist */}
-              <i className='fas fa-heart fa-beat text-3xl text-blue-500 hover:text-blue-600 cursor-pointer'></i>
+              {loadingWishlistId === singleproduct.id ? (
+                <svg
+                  className='animate-spin h-7 w-7 text-pink-600'
+                  xmlns='http://www.w3.org/2000/svg'
+                  fill='none'
+                  viewBox='0 0 24 24'
+                >
+                  <circle
+                    className='opacity-25'
+                    cx='12'
+                    cy='12'
+                    r='10'
+                    stroke='currentColor'
+                    strokeWidth='4'
+                  ></circle>
+                  <path
+                    className='opacity-75'
+                    fill='currentColor'
+                    d='M4 12a8 8 0 018-8v8z'
+                  ></path>
+                </svg>
+              ) : (
+                <i
+                  onClick={() => addToWishlist(singleproduct.id)}
+                  className='fa-solid fa-heart fa-beat text-3xl text-blue-400 hover:text-blue-600 transition-all duration-300 cursor-pointer'
+                ></i>
+              )}
             </div>
           </div>
         </div>
@@ -306,18 +358,68 @@ export default function ProductDetailsPage() {
                         />
 
                         {/* Overlay Layer */}
-                        <div className='absolute top-0 left-60 pl-6 w-full h-full group-hover:left-0 transition-all duration-300 flex justify-center items-center z-10'>
+                        <div className='absolute top-0 left-60 pl-6 w-full h-full group-hover:left-1/4 transition-all duration-300 flex justify-center items-center z-10'>
                           <div className='flex items-center gap-4'>
-                            <button
-                              onClick={() => setQuickViewProduct(product)}
-                              className='fa-bounce px-4 py-2 rounded-lg bg-blue-500 text-white shadow-xl hover:bg-blue-600 transition cursor-pointer'
-                            >
-                              Quick View
-                            </button>
                             <div className='flex flex-col gap-5 bg-slate-300 px-2 py-4 rounded-lg text-blue-700'>
-                              <i className='fa-solid fa-cart-plus fa-bounce text-xl cursor-pointer'></i>
-                              <i className='fa-solid fa-heart fa-beat text-xl cursor-pointer'></i>
-                              <i className='fa-brands fa-shake fa-quinscape text-xl'></i>
+                              {loadingCartId === product.id ? (
+                                <svg
+                                  className='animate-spin h-5 w-5 text-pink-600'
+                                  xmlns='http://www.w3.org/2000/svg'
+                                  fill='none'
+                                  viewBox='0 0 24 24'
+                                >
+                                  <circle
+                                    className='opacity-25'
+                                    cx='12'
+                                    cy='12'
+                                    r='10'
+                                    stroke='currentColor'
+                                    strokeWidth='4'
+                                  ></circle>
+                                  <path
+                                    className='opacity-75'
+                                    fill='currentColor'
+                                    d='M4 12a8 8 0 018-8v8z'
+                                  ></path>
+                                </svg>
+                              ) : (
+                                <i
+                                  onClick={() => addToCart(product.id)}
+                                  className='fa-solid fa-cart-plus fa-bounce text-xl cursor-pointer hover:text-pink-600 transition-all duration-300'
+                                ></i>
+                              )}
+
+                              {loadingWishlistId === product.id ? (
+                                <svg
+                                  className='animate-spin h-5 w-5 text-pink-600'
+                                  xmlns='http://www.w3.org/2000/svg'
+                                  fill='none'
+                                  viewBox='0 0 24 24'
+                                >
+                                  <circle
+                                    className='opacity-25'
+                                    cx='12'
+                                    cy='12'
+                                    r='10'
+                                    stroke='currentColor'
+                                    strokeWidth='4'
+                                  ></circle>
+                                  <path
+                                    className='opacity-75'
+                                    fill='currentColor'
+                                    d='M4 12a8 8 0 018-8v8z'
+                                  ></path>
+                                </svg>
+                              ) : (
+                                <i
+                                  onClick={() => addToWishlist(product.id)}
+                                  className='fa-solid fa-heart fa-beat text-xl cursor-pointer hover:text-pink-600 transition-all duration-300'
+                                ></i>
+                              )}
+                              <i
+                                onClick={() => setQuickViewProduct(product)}
+                                className='fa-brands fa-shake fa-quinscape text-xl hover:text-pink-600 transition-all duration-300 cursor-pointer'
+                              ></i>
                             </div>
                           </div>
                         </div>

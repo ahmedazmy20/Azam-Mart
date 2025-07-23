@@ -83,6 +83,7 @@ export default function CartPage() {
       toast.error("Failed to clear cart");
     } finally {
       setDeletingAll(false); // ✅ انتهى اللودينج
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   }
 
@@ -98,7 +99,7 @@ export default function CartPage() {
               className='p-6 rounded-2xl flex flex-col items-center max-w-sm'
             >
               <img
-                src={emptyCartImage} /* أو استخدم svg/png المناسب */
+                src={emptyCartImage}
                 alt='Empty Cart'
                 className='mb-4 fa-bounce'
               />
@@ -121,23 +122,24 @@ export default function CartPage() {
         </>
       ) : (
         <>
-          <div className=" min-h-screen">
+          {isLoading && (
+            <div className='fixed z-50 bg-white md:top-16 left-0 w-full h-full flex justify-center items-center'>
+              <div className='animate-spin rounded-full h-24 w-24 border-b-4 border-gray-900'></div>
+            </div>
+          )}
+          <div className=' min-h-screen'>
             <_motion.h2
               initial={{ y: 100, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.5 }}
-              className='text-xl mt-5 font-bold text-center'
+              className='text-xl mt-5 font-bold text-'
             >
-              Total Price:
-              <span className='text-blue-600'>
+              Total Price: {" "}
+              <span className='text-blue-600 text-lg'>
                 ${cartProduct?.data.data.totalCartPrice}
               </span>
             </_motion.h2>
-            {isLoading && (
-              <div className='flex justify-center items-center h-screen'>
-                <div className='animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900'></div>
-              </div>
-            )}
+
             <div className='relative overflow-x-auto shadow-2xl mt-5 rounded-lg sm:rounded-xl'>
               <table className='w-full text-sm text-left rtl:text-right text-gray-500 '>
                 <_motion.thead

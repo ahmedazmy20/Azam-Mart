@@ -15,8 +15,8 @@ export default function BrandProducts() {
 
   if (isLoading)
     return (
-      <div className='flex justify-center items-center h-screen'>
-        <span className='animate-spin h-10 w-10 border-b-4 border-gray-900 rounded-full'></span>
+      <div className='fixed z-50 bg-white md:top-16 left-0 w-full h-full flex justify-center items-center'>
+        <div className='animate-spin rounded-full h-24 w-24 border-b-4 border-gray-900'></div>
       </div>
     );
 

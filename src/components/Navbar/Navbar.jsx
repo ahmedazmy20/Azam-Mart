@@ -50,8 +50,8 @@ export default function Navbar() {
                 </NavLink>
               </li>
               <li>
-                <NavLink className='hover:text-blue-400' to='/cart'>
-                  Cart
+                <NavLink className='hover:text-blue-400' to='/categories'>
+                  Categories
                 </NavLink>
               </li>
               <li>
@@ -60,13 +60,18 @@ export default function Navbar() {
                 </NavLink>
               </li>
               <li>
-                <NavLink className='hover:text-blue-400' to='/categories'>
-                  Categories
+                <NavLink className='hover:text-blue-400' to='/brands'>
+                  Brands
                 </NavLink>
               </li>
               <li>
-                <NavLink className='hover:text-blue-400' to='/brands'>
-                  Brands
+                <NavLink className='hover:text-blue-400' to='/wishlist'>
+                  Wish List
+                </NavLink>
+              </li>
+              <li>
+                <NavLink className='hover:text-blue-400' to='/cart'>
+                  Cart
                 </NavLink>
               </li>
             </ul>

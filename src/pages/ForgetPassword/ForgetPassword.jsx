@@ -69,7 +69,7 @@ export default function ForgotPassword() {
       initial={{ opacity: 0, scale: 0.1 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.5 }}
-      className='form my-10 bg-slate-50 shadow-2xl rounded-2xl px-6 py-12 max-w-2xl mx-auto'
+      className='form mt-20 mb-52 bg-slate-50 shadow-2xl rounded-2xl px-6 py-12 max-w-2xl mx-auto'
     >
       <h2 className='text-2xl font-bold text-blue-600 mb-4 text-center'>
         Forgot Password

@@ -12,8 +12,8 @@ export default function BrandsPage() {
 
   if (isLoading)
     return (
-      <div className='flex justify-center items-center h-screen'>
-        <span className='animate-spin h-10 w-10 border-b-4 border-gray-900 rounded-full'></span>
+      <div className='fixed z-50 bg-white md:top-16 left-0 w-full h-full flex justify-center items-center'>
+        <div className='animate-spin rounded-full h-24 w-24 border-b-4 border-gray-900'></div>
       </div>
     );
 
@@ -44,7 +44,9 @@ export default function BrandsPage() {
               alt={brand.name}
               className='w-20 h-20 object-contain mb-4'
             />
-            <p className='text-sm text-blue-600 font-medium text-center'>{brand.name}</p>
+            <p className='text-sm text-blue-600 font-medium text-center'>
+              {brand.name}
+            </p>
           </Link>
         ))}
       </div>

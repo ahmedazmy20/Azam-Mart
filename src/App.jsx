@@ -20,6 +20,8 @@ import CartContextProvider from "./Context/Cart/CartContextProvider";
 import { ToastContainer } from "react-toastify";
 import CategoryProductsPage from "./pages/CategoryProductsPage/CategoryProductsPage";
 import BrandProducts from "./pages/BrandProducts/BrandProducts";
+import WishlistPage from "./pages/WishlistPage/WishlistPage";
+import WishlistContextProvider from "./Context/Wishlist/WishlistContextProvider";
 
 function App() {
   const queryClient = new QueryClient();
@@ -93,6 +95,14 @@ function App() {
           ),
         },
         {
+          path: "wishlist",
+          element: (
+            <ProtectedRoute>
+              <WishlistPage />
+            </ProtectedRoute>
+          ),
+        },
+        {
           path: "login",
           element: <LoginPage />,
         },
@@ -124,7 +134,9 @@ function App() {
       <UserContextProvider>
         <QueryClientProvider client={queryClient}>
           <CartContextProvider>
-            <RouterProvider router={router}></RouterProvider>
+            <WishlistContextProvider>
+              <RouterProvider router={router}></RouterProvider>
+            </WishlistContextProvider>
             <ToastContainer />
           </CartContextProvider>
         </QueryClientProvider>
