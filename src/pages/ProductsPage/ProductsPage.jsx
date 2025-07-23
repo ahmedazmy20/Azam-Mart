@@ -4,7 +4,7 @@ import RecentProducts from "../RecentProducts/RecentProducts";
 export default function ProductsPage() {
   return (
     <>
-      <RecentProducts />;
+      <RecentProducts />
     </>
   );
 }

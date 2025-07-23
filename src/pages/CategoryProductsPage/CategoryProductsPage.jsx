@@ -1,21 +1,28 @@
+import { useOutletContext, useParams, Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/scrollbar";
+import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 import { motion as _motion } from "framer-motion";
-import { Link } from "react-router-dom";
 import { useContext, useState } from "react";
-import { useOutletContext } from "react-router-dom";
-import useProducts from "../../Hooks/useProducts";
-import { CartContext } from "../../Context/Cart/CartContext";
 import { Bounce, toast } from "react-toastify";
+import { CartContext } from "../../Context/Cart/CartContext";
 
-export default function RecentProducts() {
+export default function CategoryProductsPage() {
   const { setQuickViewProduct } = useOutletContext();
   const [mainImages, setMainImages] = useState({});
   const [loadingCartId, setLoadingCartId] = useState(null);
-  const [sortOrder, setSortOrder] = useState("none");
   const { addProductToCart } = useContext(CartContext);
+  const [sortOrder, setSortOrder] = useState("none");
+
+  const { id, name } = useParams();
+
+  const getCategoryProducts = () =>
+    axios.get(`https://ecommerce.routemisr.com/api/v1/products?category=${id}`);
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["categoryProducts", id],
+    queryFn: getCategoryProducts,
+  });
 
   async function addToCart(id) {
     setLoadingCartId(id);
@@ -38,15 +45,25 @@ export default function RecentProducts() {
     }
   }
 
-  const { data, isLoading } = useProducts();
-
-  const handleImageClick = (productId, newImage) => {
+  function handleImageClick(productId, newImage) {
     setMainImages((prevImages) => ({
       ...prevImages,
       [productId]: newImage,
     }));
-  };
+  }
 
+  if (isLoading) {
+    return (
+      <div className='fixed z-50 bg-white md:top-16 left-0 w-full h-full flex justify-center items-center'>
+        <div className='animate-spin rounded-full h-24 w-24 border-b-4 border-gray-900'></div>
+      </div>
+    );
+  }
+
+  if (error)
+    return (
+      <p className='text-red-600 text-center mt-10'>Error loading products</p>
+    );
   const allProducts = data?.data?.data || [];
 
   const sortedProducts = [...allProducts].sort((a, b) => {
@@ -57,31 +74,39 @@ export default function RecentProducts() {
 
   return (
     <>
-      {isLoading ? (
-        <div className='fixed z-50 bg-white md:top-16 left-0 w-full h-full flex justify-center items-center'>
-          <div className='animate-spin rounded-full h-24 w-24 border-b-4 border-gray-900'></div>
-        </div>
-      ) : (
-        <>
-          {/* فرز السعر */}
-          <div className='flex justify-end px-4 mb-6'>
-            <select
-              value={sortOrder}
-              onChange={(e) => setSortOrder(e.target.value)}
-              className='border px-3 py-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500'
-            >
-              <option value='none'>Sort by</option>
-              <option value='asc'>Price: Low to High</option>
-              <option value='desc'>Price: High to Low</option>
-            </select>
-          </div>
+      <_motion.div
+        initial={{ opacity: 0, y: -100 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        className='flex justify-center items-center mt-10'
+      >
+        <h2 className='text-3xl font-bold'>{name}</h2>
+      </_motion.div>
 
-          <_motion.div
-            initial={{ opacity: 0, y: 100 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className='grid grid-cols-1 place-items-center sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mt-10'
+      <_motion.div
+        initial={{ opacity: 0, y: 100 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        className='w-full mt-10 min-h-screen'
+      >
+        <div className='flex justify-end mb-6 px-4'>
+          <select
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+            className='border px-3 py-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500'
           >
+            <option value='none'>Sort by</option>
+            <option value='asc'>Price: Low to High</option>
+            <option value='desc'>Price: High to Low</option>
+          </select>
+        </div>
+
+        {data?.data?.data.length === 0 ? (
+          <div className='text-center text-xl text-gray-500 font-semibold py-10'>
+            No products in this category yet.
+          </div>
+        ) : (
+          <div className='grid grid-cols-1 place-items-center sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4'>
             {sortedProducts.map((product) => (
               <div
                 key={product.id}
@@ -89,15 +114,12 @@ export default function RecentProducts() {
               >
                 <div className='w-full max-w-sm rounded-lg overflow-hidden'>
                   <div className='relative group'>
-                    {/* الصورة الأساسية */}
                     <img
                       loading='lazy'
                       className='main-image p-4 rounded-t-lg w-full h-64 object-contain'
                       src={mainImages[product.id] || product.imageCover}
                       alt={product.title}
                     />
-
-                    {/* Overlay Layer */}
                     <div className='absolute top-0 left-60 pl-6 w-full h-full group-hover:left-0 transition-all duration-500 flex justify-center items-center z-10'>
                       <div className='flex items-center gap-4'>
                         <button
@@ -134,7 +156,6 @@ export default function RecentProducts() {
                               className='fa-solid fa-cart-plus fa-bounce text-xl cursor-pointer'
                             ></i>
                           )}
-
                           <i className='fa-solid fa-heart fa-beat text-xl cursor-pointer'></i>
                           <i className='fa-brands fa-shake fa-quinscape text-xl'></i>
                         </div>
@@ -143,7 +164,6 @@ export default function RecentProducts() {
                   </div>
                 </div>
 
-                {/* الصور المصغرة (سلايدر) */}
                 <div className='related-images py-2 px-4'>
                   <Swiper
                     spaceBetween={10}
@@ -165,7 +185,6 @@ export default function RecentProducts() {
                   </Swiper>
                 </div>
 
-                {/* باقي تفاصيل المنتج */}
                 <div className='px-5 pb-5'>
                   <div>
                     <h5 className='text-xl font-semibold line-clamp-1 tracking-tight text-gray-900'>
@@ -187,7 +206,6 @@ export default function RecentProducts() {
                       {[1, 2, 3, 4, 5].map((star) => {
                         const rating = product.ratingsAverage || 0;
                         if (star <= Math.floor(rating)) {
-                          // نجمة كاملة
                           return (
                             <svg
                               key={star}
@@ -196,11 +214,10 @@ export default function RecentProducts() {
                               fill='currentColor'
                               className='w-4 h-5 text-yellow-400'
                             >
-                              <path d='M11.049 2.927c.3-.921 1.603-.921 1.902 0l2.021 6.214h6.545c.969 0 1.371 1.24.588 1.81l-5.29 3.845 2.02 6.214c.3.921-.755 1.688-1.54 1.118l-5.291-3.846-5.29 3.846c-.785.57-1.84-.197-1.54-1.118l2.02-6.214-5.29-3.845c-.783-.57-.38-1.81.588-1.81h6.545l2.02-6.214z' />
+                              <path d='M11.049 2.927...' />
                             </svg>
                           );
                         } else if (star - rating <= 0.5) {
-                          // نص نجمة
                           return (
                             <svg
                               key={star}
@@ -222,12 +239,11 @@ export default function RecentProducts() {
                               </defs>
                               <path
                                 fill={`url(#half-star-${star})`}
-                                d='M11.049 2.927c.3-.921 1.603-.921 1.902 0l2.021 6.214h6.545c.969 0 1.371 1.24.588 1.81l-5.29 3.845 2.02 6.214c.3.921-.755 1.688-1.54 1.118l-5.291-3.846-5.29 3.846c-.785.57-1.84-.197-1.54-1.118l2.02-6.214-5.29-3.845c-.783-.57-.38-1.81.588-1.81h6.545l2.02-6.214z'
+                                d='M11.049 2.927...'
                               />
                             </svg>
                           );
                         } else {
-                          // نجمة فاضية
                           return (
                             <svg
                               key={star}
@@ -236,7 +252,7 @@ export default function RecentProducts() {
                               fill='currentColor'
                               className='w-4 h-5 text-gray-300'
                             >
-                              <path d='M11.049 2.927c.3-.921 1.603-.921 1.902 0l2.021 6.214h6.545c.969 0 1.371 1.24.588 1.81l-5.29 3.845 2.02 6.214c.3.921-.755 1.688-1.54 1.118l-5.291-3.846-5.29 3.846c-.785.57-1.84-.197-1.54-1.118l2.02-6.214-5.29-3.845c-.783-.57-.38-1.81.588-1.81h6.545l2.02-6.214z' />
+                              <path d='M11.049 2.927...' />
                             </svg>
                           );
                         }
@@ -258,9 +274,9 @@ export default function RecentProducts() {
                 </div>
               </div>
             ))}
-          </_motion.div>
-        </>
-      )}
+          </div>
+        )}
+      </_motion.div>
     </>
   );
 }

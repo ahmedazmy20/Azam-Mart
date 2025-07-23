@@ -18,6 +18,8 @@ import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import CartContextProvider from "./Context/Cart/CartContextProvider";
 import { ToastContainer } from "react-toastify";
+import CategoryProductsPage from "./pages/CategoryProductsPage/CategoryProductsPage";
+import BrandProducts from "./pages/BrandProducts/BrandProducts";
 
 function App() {
   const queryClient = new QueryClient();
@@ -67,10 +69,26 @@ function App() {
           ),
         },
         {
+          path: "categories/:id/:name",
+          element: (
+            <ProtectedRoute>
+              <CategoryProductsPage />
+            </ProtectedRoute>
+          ),
+        },
+        {
           path: "brands",
           element: (
             <ProtectedRoute>
               <BrandsPage />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "brands/:id",
+          element: (
+            <ProtectedRoute>
+              <BrandProducts />
             </ProtectedRoute>
           ),
         },

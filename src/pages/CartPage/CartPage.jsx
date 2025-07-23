@@ -95,7 +95,7 @@ export default function CartPage() {
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ type: "spring", stiffness: 120 }}
-              className='p-6 rounded-2xl  flex flex-col items-center max-w-sm'
+              className='p-6 rounded-2xl flex flex-col items-center max-w-sm'
             >
               <img
                 src={emptyCartImage} /* أو استخدم svg/png المناسب */
@@ -121,7 +121,7 @@ export default function CartPage() {
         </>
       ) : (
         <>
-          <div>
+          <div className=" min-h-screen">
             <_motion.h2
               initial={{ y: 100, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
@@ -187,6 +187,7 @@ export default function CartPage() {
                       <td className='px-6 py-4'>
                         <div className='flex items-center'>
                           <button
+                            disabled={updatingProductId === product.product._id} // ✅ هنا الإضافة
                             onClick={() =>
                               updateProduct(
                                 product.product._id,
@@ -223,6 +224,7 @@ export default function CartPage() {
                             </span>
                           </div>
                           <button
+                            disabled={updatingProductId === product.product._id} // ✅ هنا الإضافة
                             onClick={() =>
                               updateProduct(
                                 product.product._id,

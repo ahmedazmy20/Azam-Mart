@@ -223,7 +223,7 @@ export default function ProductDetailsPage() {
               {/* Add to Cart */}
               <button
                 onClick={() => addToCart(singleproduct.id)}
-                className='bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded flex items-center justify-center gap-2 min-w-[120px]'
+                className='bg-blue-500 cursor-pointer hover:bg-blue-600 text-white py-2 px-4 rounded flex items-center justify-center gap-2 min-w-[120px]'
                 disabled={loadingCartId === singleproduct.id}
               >
                 {loadingCartId === singleproduct.id ? (

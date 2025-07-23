@@ -3,13 +3,10 @@ import { EffectCoverflow, Autoplay } from "swiper/modules";
 import { motion as _motion } from "framer-motion";
 import "swiper/css";
 import "swiper/css/effect-coverflow";
-import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
+import { getCategories } from "../../apis/categories";
 
 export default function CategoriesSlider() {
-  function getCategories() {
-    return axios.get("https://ecommerce.routemisr.com/api/v1/categories");
-  }
   const { data } = useQuery({
     queryKey: ["categories"],
     queryFn: getCategories,
