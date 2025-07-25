@@ -120,11 +120,11 @@ export default function Navbar() {
         <AnimatePresence>
           {isOpen && (
             <_motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.4, ease: "easeInOut" }}
-              className='w-full mt-4 md:hidden overflow-hidden space-y-3 text-center'
+              initial={{ scaleY: 0, opacity: 0 }}
+              animate={{ scaleY: 1, opacity: 1 }}
+              exit={{ scaleY: 0, opacity: 0 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className='origin-top w-full mt-4 md:hidden overflow-hidden space-y-3 text-center'
             >
               {userLogin ? (
                 <>
