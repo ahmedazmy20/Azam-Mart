@@ -142,11 +142,12 @@ export default function Navbar() {
                       <NavLink
                         onClick={() => setIsOpen(false)}
                         className='block hover:text-blue-400'
-                        to='/cart'
+                        to='/categories'
                       >
-                        Cart
+                        Categories
                       </NavLink>
                     </li>
+
                     <li>
                       <NavLink
                         onClick={() => setIsOpen(false)}
@@ -156,15 +157,7 @@ export default function Navbar() {
                         Products
                       </NavLink>
                     </li>
-                    <li>
-                      <NavLink
-                        onClick={() => setIsOpen(false)}
-                        className='block hover:text-blue-400'
-                        to='/categories'
-                      >
-                        Categories
-                      </NavLink>
-                    </li>
+
                     <li>
                       <NavLink
                         onClick={() => setIsOpen(false)}
@@ -172,6 +165,15 @@ export default function Navbar() {
                         to='/brands'
                       >
                         Brands
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink
+                        onClick={() => setIsOpen(false)}
+                        className='block hover:text-blue-400'
+                        to='/cart'
+                      >
+                        Cart
                       </NavLink>
                     </li>
                   </ul>
