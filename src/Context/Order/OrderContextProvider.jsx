@@ -20,6 +20,9 @@ export default function OrderContextProvider({ children }) {
   }
 
   async function checkout(cartId, url, formData) {
+
+    console.log('url from checkout' , url);
+    
     return await axios.post(
       `https://ecommerce.routemisr.com/api/v1/orders/checkout-session/${cartId}?url=${url}`,
       {

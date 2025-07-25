@@ -4,6 +4,7 @@ import { useContext, useState } from "react";
 import * as Yup from "yup";
 import { CartContext } from "../../Context/Cart/CartContext";
 import { OrderContext } from "../../Context/Order/OrderContext";
+import url from "../../config";
 export default function ShippingPage() {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -29,7 +30,7 @@ export default function ShippingPage() {
       city: "",
     },
     validationSchema,
-    onSubmit: () => handelChickout(cartId, window.location.origin),
+    onSubmit: () => handelChickout(cartId, `${url}`),
   });
 
   async function handelChickout(cartId, url) {
@@ -37,6 +38,7 @@ export default function ShippingPage() {
     try {
       let { data } = await checkout(cartId, url, formik.values);
       window.location.href = data.session.url;
+      console.log("stripe", data.session.url);
     } catch (err) {
       console.error(err);
       setIsLoading(false);
