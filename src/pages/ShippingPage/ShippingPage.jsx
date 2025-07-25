@@ -29,7 +29,7 @@ export default function ShippingPage() {
       city: "",
     },
     validationSchema,
-    onSubmit: () => handelChickout(cartId, `http://localhost:5173`),
+    onSubmit: () => handelChickout(cartId, window.location.origin),
   });
 
   async function handelChickout(cartId, url) {
