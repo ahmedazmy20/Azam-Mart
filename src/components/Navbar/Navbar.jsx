@@ -171,6 +171,15 @@ export default function Navbar() {
                       <NavLink
                         onClick={() => setIsOpen(false)}
                         className='block hover:text-blue-400'
+                        to='/wishlist'
+                      >
+                        Wish List
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink
+                        onClick={() => setIsOpen(false)}
+                        className='block hover:text-blue-400'
                         to='/cart'
                       >
                         Cart
