@@ -36,6 +36,7 @@ export default function LoginPage() {
         values
       );
       localStorage.setItem("userToken", data.token);
+      
       setuserLogin(data.token);
       navigate("/");
     } catch (error) {

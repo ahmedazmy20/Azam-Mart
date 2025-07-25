@@ -7,7 +7,7 @@ export default function CartContextProvider({ children }) {
   const headers = {
     token: localStorage.getItem("userToken"),
   };
-  const [cartId, setCartId] = useState(null)
+  const [cartId, setCartId] = useState(null);
   function addProductToCart(id) {
     return axios
       .post(
@@ -27,8 +27,8 @@ export default function CartContextProvider({ children }) {
     return axios
       .get("https://ecommerce.routemisr.com/api/v1/cart", { headers })
       .then((res) => {
-        setCartId(res.data.cartId)
-        // console.log("res", res.data.cartId);
+        setCartId(res.data.cartId);
+        localStorage.setItem("userId", res?.data?.data?.cartOwner);
         return res;
       })
       .catch((err) => err);
@@ -72,10 +72,6 @@ export default function CartContextProvider({ children }) {
         headers,
       }
     );
-    // .then((res) => {
-    //   console.log(res);
-    // })
-    // .catch((err) => console.log(err));
   }
 
   useEffect(() => {
@@ -90,7 +86,7 @@ export default function CartContextProvider({ children }) {
         removeCartItem,
         deleteAllCartItems,
         checkout,
-        cartId
+        cartId,
       }}
     >
       {children}

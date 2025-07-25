@@ -26,9 +26,7 @@ export default function ForgotPassword() {
         "https://ecommerce.routemisr.com/api/v1/auth/forgotPasswords",
         values
       );
-      console.log("forget passowr data", data);
       setMessage(data.message || "Code sent to your email.");
-      console.log("message from forget password", data.message); // success or error
 
       setApierror("");
       setTimeout(() => {

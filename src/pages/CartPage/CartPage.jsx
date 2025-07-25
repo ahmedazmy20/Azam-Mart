@@ -29,8 +29,6 @@ export default function CartPage() {
     queryFn: getCartProducts,
   });
 
-  console.log(cartProduct?.data.cartId);
-
   async function updateProduct(id, count) {
     setUpdatingProductId(id); //  ابدأ التحميل
     try {

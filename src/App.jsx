@@ -24,6 +24,7 @@ import WishlistPage from "./pages/WishlistPage/WishlistPage";
 import WishlistContextProvider from "./Context/Wishlist/WishlistContextProvider";
 import ShippingPage from "./pages/ShippingPage/ShippingPage";
 import AllordersPage from "./pages/AllordersPage/AllordersPage";
+import OrderContextProvider from "./Context/Order/OrderContextProvider";
 
 function App() {
   const queryClient = new QueryClient();
@@ -153,7 +154,9 @@ function App() {
         <QueryClientProvider client={queryClient}>
           <CartContextProvider>
             <WishlistContextProvider>
-              <RouterProvider router={router}></RouterProvider>
+              <OrderContextProvider>
+                <RouterProvider router={router}></RouterProvider>
+              </OrderContextProvider>
             </WishlistContextProvider>
             <ToastContainer />
           </CartContextProvider>

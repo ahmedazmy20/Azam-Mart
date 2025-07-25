@@ -43,18 +43,16 @@ export default function WishlistPage() {
     queryFn: getWishlistProducts,
   });
 
-  console.log("wishlistProduct", wishlistProduct?.data?.data);
-
   //wishlistProduct?.data?.data?.products
   async function removeProductWIshlist(id) {
-    setRemovingProductId(id); // ⏳ ابدأ اللودينج
+    setRemovingProductId(id);
     try {
-      await removeWishlistItem(id); // 🟢 حدّث الكمية
-      await refetch(); // 🟢 أعد تحميل البيانات وانتظرها
+      await removeWishlistItem(id);
+      await refetch();
     } catch (error) {
       console.error("Error updating product:", error);
     } finally {
-      setRemovingProductId(null); // ✅ بعد ما تخلص شيل اللودينج
+      setRemovingProductId(null);
       toast.success("Product removed from WishList.", {
         position: "top-center",
         autoClose: 2000,

@@ -72,6 +72,19 @@ export default function ProductsList({ products = [] }) {
     return 0;
   });
 
+  const cardVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: (i) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        delay: i * 0.15,
+        duration: 0.5,
+        ease: "easeOut",
+      },
+    }),
+  };
+
   return (
     <>
       <div className='flex justify-end px-4 mb-6'>
@@ -92,10 +105,14 @@ export default function ProductsList({ products = [] }) {
         transition={{ duration: 0.8 }}
         className='grid grid-cols-1 place-items-center sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mt-10'
       >
-        {sortedProducts.map((product) => (
-          <div
+        {sortedProducts.map((product, index) => (
+          <_motion.div
             key={product.id}
-            className='max-w-sm  w-xs sm:w-full rounded-tr-[3rem] border-2 border-gray-200 rounded-bl-[3rem] shadow-xl overflow-hidden'
+            custom={index}
+            variants={cardVariants}
+            initial='hidden'
+            animate='visible'
+            className='max-w-sm w-xs sm:w-full rounded-tr-[3rem] border-2 border-gray-200 rounded-bl-[3rem] shadow-xl overflow-hidden'
           >
             <div className='w-full max-w-sm rounded-lg overflow-hidden'>
               <div className='relative group'>
@@ -274,7 +291,7 @@ export default function ProductsList({ products = [] }) {
                 </Link>
               </div>
             </div>
-          </div>
+          </_motion.div>
         ))}
       </_motion.div>
     </>

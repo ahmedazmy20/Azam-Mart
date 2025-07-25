@@ -3,10 +3,12 @@ import { motion as _motion } from "framer-motion";
 import { useContext, useState } from "react";
 import * as Yup from "yup";
 import { CartContext } from "../../Context/Cart/CartContext";
+import { OrderContext } from "../../Context/Order/OrderContext";
 export default function ShippingPage() {
   const [isLoading, setIsLoading] = useState(false);
 
-  let { checkout, cartId } = useContext(CartContext);
+  let { cartId } = useContext(CartContext);
+  let { checkout } = useContext(OrderContext);
 
   let validationSchema = Yup.object({
     details: Yup.string()
@@ -125,7 +127,7 @@ export default function ShippingPage() {
             </div>
             <button
               type='submit'
-              disabled={isLoading} 
+              disabled={isLoading}
               className='cursor-pointer bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex items-center gap-2 min-w-[120px] justify-center disabled:opacity-70'
             >
               {isLoading ? (
