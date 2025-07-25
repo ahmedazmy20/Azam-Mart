@@ -5,6 +5,7 @@ import { motion as _motion } from "framer-motion";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import emptyCartImage from "../../assets/emptycart.png";
+import { useNavigate } from "react-router-dom";
 
 export default function CartPage() {
   const {
@@ -16,6 +17,8 @@ export default function CartPage() {
   const [updatingProductId, setUpdatingProductId] = useState(null); // 🟡 لتعقب المنتج اللي بيتم تحديثه
   const [removingProductId, setRemovingProductId] = useState(null);
   const [deletingAll, setDeletingAll] = useState(false);
+  const [shipping, setShipping] = useState(false);
+  const navigate = useNavigate();
 
   const {
     data: cartProduct,
@@ -25,6 +28,8 @@ export default function CartPage() {
     queryKey: ["cart"],
     queryFn: getCartProducts,
   });
+
+  console.log(cartProduct?.data.cartId);
 
   async function updateProduct(id, count) {
     setUpdatingProductId(id); //  ابدأ التحميل
@@ -73,16 +78,16 @@ export default function CartPage() {
   async function deleteAll() {
     setDeletingAll(true); // 🔄 ابدأ اللودينج
     try {
-      const res = await deleteAllCartItems(); // 🧠 بلاش تبعت cartId هنا
+      const res = await deleteAllCartItems(); //  بلاش تبعت cartId هنا
       if (res.status === 200) {
         toast.success("Cart cleared successfully");
-        await refetch(); // 🟢 علشان تحدث الداتا بعد المسح
+        await refetch(); //  علشان تحدث الداتا بعد المسح
       }
     } catch (error) {
       console.error("Error clearing cart:", error);
       toast.error("Failed to clear cart");
     } finally {
-      setDeletingAll(false); // ✅ انتهى اللودينج
+      setDeletingAll(false); //  انتهى اللودينج
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   }
@@ -134,7 +139,7 @@ export default function CartPage() {
               transition={{ duration: 0.5 }}
               className='text-xl mt-5 font-bold text-'
             >
-              Total Price: {" "}
+              Total Price:{" "}
               <span className='text-blue-600 text-lg'>
                 ${cartProduct?.data.data.totalCartPrice}
               </span>
@@ -275,7 +280,47 @@ export default function CartPage() {
                 </_motion.tbody>
               </table>
             </div>
-            <div className='flex justify-end mr-6 mt-10'>
+            <div className='flex justify-end mr-6 mt-10 gap-8'>
+              <button
+                onClick={() => {
+                  setShipping(true);
+                  setTimeout(() => {
+                    navigate("/shipping");
+                  }, 500);
+                }}
+                className='cursor-pointer bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex items-center gap-2 min-w-[120px] justify-center'
+                disabled={shipping}
+              >
+                {shipping ? (
+                  <>
+                    <svg
+                      className='animate-spin h-5 w-5 text-white'
+                      xmlns='http://www.w3.org/2000/svg'
+                      fill='none'
+                      viewBox='0 0 24 24'
+                    >
+                      <circle
+                        className='opacity-25'
+                        cx='12'
+                        cy='12'
+                        r='10'
+                        stroke='currentColor'
+                        strokeWidth='4'
+                      ></circle>
+                      <path
+                        className='opacity-75'
+                        fill='currentColor'
+                        d='M4 12a8 8 0 018-8v8z'
+                      ></path>
+                    </svg>
+                    <span>Loading...</span>
+                  </>
+                ) : (
+                  <>
+                    <i className='fa-solid fa-truck'></i> Shipping
+                  </>
+                )}
+              </button>
               <button
                 onClick={deleteAll}
                 className='cursor-pointer bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded flex items-center gap-2 min-w-[120px] justify-center'

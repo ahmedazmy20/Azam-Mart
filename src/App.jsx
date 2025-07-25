@@ -22,6 +22,8 @@ import CategoryProductsPage from "./pages/CategoryProductsPage/CategoryProductsP
 import BrandProducts from "./pages/BrandProducts/BrandProducts";
 import WishlistPage from "./pages/WishlistPage/WishlistPage";
 import WishlistContextProvider from "./Context/Wishlist/WishlistContextProvider";
+import ShippingPage from "./pages/ShippingPage/ShippingPage";
+import AllordersPage from "./pages/AllordersPage/AllordersPage";
 
 function App() {
   const queryClient = new QueryClient();
@@ -99,6 +101,22 @@ function App() {
           element: (
             <ProtectedRoute>
               <WishlistPage />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "shipping",
+          element: (
+            <ProtectedRoute>
+              <ShippingPage />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "allorders",
+          element: (
+            <ProtectedRoute>
+              <AllordersPage />
             </ProtectedRoute>
           ),
         },

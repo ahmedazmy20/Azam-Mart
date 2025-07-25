@@ -68,6 +68,28 @@ export default function WishlistPage() {
     }
   }
 
+  const containerVariants = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 30, scale: 0.95 },
+    show: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        duration: 0.4,
+        ease: "easeOut",
+      },
+    },
+  };
+
   return (
     <>
       {wishlistProduct?.data?.data?.length === 0 ? (
@@ -114,13 +136,16 @@ export default function WishlistPage() {
                   Your Wishlist
                 </_motion.h2>
 
-                <div className='grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 p-2'>
+                <_motion.div
+                  className='grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 p-2'
+                  variants={containerVariants}
+                  initial='hidden'
+                  animate='show'
+                >
                   {wishlistProduct?.data?.data.map((product) => (
                     <_motion.div
                       key={product._id}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3 }}
+                      variants={cardVariants}
                       className='bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300'
                     >
                       <div className='relative'>
@@ -252,7 +277,7 @@ export default function WishlistPage() {
                       </div>
                     </_motion.div>
                   ))}
-                </div>
+                </_motion.div>
               </div>
             </div>
             <div className='flex justify-end mr-6 mt-10'></div>

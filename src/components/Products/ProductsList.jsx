@@ -78,11 +78,11 @@ export default function ProductsList({ products = [] }) {
         <select
           value={sortOrder}
           onChange={(e) => setSortOrder(e.target.value)}
-          className='border px-3 py-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500'
+          className='border cursor-pointer px-1 py-1 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500'
         >
-          <option value='none'>Sort by</option>
-          <option value='asc'>Price: Low to High</option>
-          <option value='desc'>Price: High to Low</option>
+          <option value='none'>Sort by Price</option>
+          <option value='asc'>Low to High</option>
+          <option value='desc'>High to Low</option>
         </select>
       </div>
 
@@ -95,7 +95,7 @@ export default function ProductsList({ products = [] }) {
         {sortedProducts.map((product) => (
           <div
             key={product.id}
-            className='max-w-sm w-xs sm:w-full rounded-lg shadow-md overflow-hidden'
+            className='max-w-sm  w-xs sm:w-full rounded-tr-[3rem] border-2 border-gray-200 rounded-bl-[3rem] shadow-xl overflow-hidden'
           >
             <div className='w-full max-w-sm rounded-lg overflow-hidden'>
               <div className='relative group'>

@@ -1,10 +1,13 @@
+import { useEffect } from "react";
 import { CartContext } from "./CartContext";
 import axios from "axios";
+import { useState } from "react";
 
 export default function CartContextProvider({ children }) {
   const headers = {
     token: localStorage.getItem("userToken"),
   };
+  const [cartId, setCartId] = useState(null)
   function addProductToCart(id) {
     return axios
       .post(
@@ -23,7 +26,11 @@ export default function CartContextProvider({ children }) {
   function getCartProducts() {
     return axios
       .get("https://ecommerce.routemisr.com/api/v1/cart", { headers })
-      .then((res) => res)
+      .then((res) => {
+        setCartId(res.data.cartId)
+        // console.log("res", res.data.cartId);
+        return res;
+      })
       .catch((err) => err);
   }
   function updateProductQuantity(productId, newCount) {
@@ -55,7 +62,25 @@ export default function CartContextProvider({ children }) {
       .catch((err) => err);
   }
 
+  async function checkout(cartId, url, formData) {
+    return await axios.post(
+      `https://ecommerce.routemisr.com/api/v1/orders/checkout-session/${cartId}?url=${url}`,
+      {
+        shippingAddress: formData,
+      },
+      {
+        headers,
+      }
+    );
+    // .then((res) => {
+    //   console.log(res);
+    // })
+    // .catch((err) => console.log(err));
+  }
 
+  useEffect(() => {
+    getCartProducts();
+  }, []);
   return (
     <CartContext.Provider
       value={{
@@ -64,6 +89,8 @@ export default function CartContextProvider({ children }) {
         getCartProducts,
         removeCartItem,
         deleteAllCartItems,
+        checkout,
+        cartId
       }}
     >
       {children}

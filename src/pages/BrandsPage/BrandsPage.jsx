@@ -24,32 +24,66 @@ export default function BrandsPage() {
       </div>
     );
 
+  const containerVariants = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, scale: 0.9, y: 30 },
+    show: {
+      opacity: 1,
+      scale: 1,
+      y: 0,
+      transition: { duration: 0.4, ease: "easeOut" },
+    },
+  };
+
+  const imageVariants = {
+    hidden: { scale: 0.8, opacity: 0 },
+    show: { scale: 1, opacity: 1, transition: { duration: 0.3, delay: 0.1 } },
+  };
+
+  const nameVariants = {
+    hidden: { opacity: 0, y: 10 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.3 } },
+  };
+
   return (
-    <_motion.div
-      className='container mx-auto px-4 py-10'
-      initial={{ opacity: 0, y: 50 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
-    >
+    <div className='container mx-auto px-4 py-10'>
       <h2 className='text-2xl font-bold mb-6 text-center'>All Brands</h2>
-      <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6'>
+      <_motion.div
+        className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6'
+        variants={containerVariants}
+        initial='hidden'
+        animate='show'
+      >
         {data?.data?.data?.map((brand) => (
-          <Link
-            to={`/brands/${brand._id}`}
-            key={brand._id}
-            className='border hover:shadow-blue-500 rounded-lg shadow-md p-4 flex flex-col items-center hover:scale-105 transition-all duration-300 cursor-pointer'
-          >
-            <img
-              src={brand.image}
-              alt={brand.name}
-              className='w-20 h-20 object-contain mb-4'
-            />
-            <p className='text-sm text-blue-600 font-medium text-center'>
-              {brand.name}
-            </p>
-          </Link>
+          <_motion.div key={brand._id} variants={cardVariants}>
+            <Link
+              to={`/brands/${brand._id}`}
+              className='border hover:shadow-blue-500 rounded-lg shadow-md p-4 flex flex-col items-center hover:scale-105 transition-all duration-300 cursor-pointer'
+            >
+              <_motion.img
+                src={brand.image}
+                alt={brand.name}
+                variants={imageVariants}
+                className='w-20 h-20 object-contain mb-4'
+              />
+              <_motion.p
+                variants={nameVariants}
+                className='text-sm text-blue-600 font-medium text-center'
+              >
+                {brand.name}
+              </_motion.p>
+            </Link>
+          </_motion.div>
         ))}
-      </div>
-    </_motion.div>
+      </_motion.div>
+    </div>
   );
 }
