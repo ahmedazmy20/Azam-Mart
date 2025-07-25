@@ -3,20 +3,34 @@ import { OrderContext } from "../../Context/Order/OrderContext";
 
 export default function AllordersPage() {
   const [allorders, setallorders] = useState([]);
+  const [loading, setLoading] = useState(true); // <-- حالة التحميل
   const { getUserOrder } = useContext(OrderContext);
 
   async function handeAllOrders() {
     try {
       const { data } = await getUserOrder();
-      setallorders(data);
+      setallorders(data || []);
     } catch (err) {
       console.error(err);
+    } finally {
+      setLoading(false); // <-- إيقاف التحميل بعد الاستجابة
     }
   }
 
   useEffect(() => {
     handeAllOrders();
   }, []);
+
+  // ✅ أثناء التحميل
+  if (loading) {
+    return (
+      <div className='flex justify-center items-center h-screen'>
+        <span className='text-xl font-medium text-gray-600 animate-pulse'>
+          ⏳ Loading your orders...
+        </span>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -25,10 +39,10 @@ export default function AllordersPage() {
           🧾 Your Orders
         </h2>
 
-        {allorders.length === 0 ? (
+        {allorders?.length === 0 ? (
           <p className='text-center text-gray-500'>No orders yet.</p>
         ) : (
-          allorders.map((order, orderIndex) => (
+          allorders?.map((order, orderIndex) => (
             <div
               key={orderIndex}
               className='bg-white shadow-lg rounded-2xl p-6 mb-6 border border-gray-100'
