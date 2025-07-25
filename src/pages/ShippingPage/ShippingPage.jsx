@@ -30,7 +30,7 @@ export default function ShippingPage() {
       city: "",
     },
     validationSchema,
-    onSubmit: () => handelChickout(cartId, `${url}/allorders`),
+    onSubmit: () => handelChickout(cartId, `${url}`),
   });
 
   async function handelChickout(cartId, url) {
