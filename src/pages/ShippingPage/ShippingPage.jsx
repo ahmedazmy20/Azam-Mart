@@ -30,15 +30,17 @@ export default function ShippingPage() {
       city: "",
     },
     validationSchema,
-    onSubmit: () => handelChickout(cartId, `${url}`),
+    onSubmit: () => handelChickout(cartId, `${url}/allorders`),
   });
 
   async function handelChickout(cartId, url) {
+    console.log("returned url",url);
+    
     setIsLoading(true);
     try {
       let { data } = await checkout(cartId, url, formik.values);
       window.location.href = data.session.url;
-      console.log("stripe", data.session.url);
+      console.log("stripe url", data.session.url);
     } catch (err) {
       console.error(err);
       setIsLoading(false);
